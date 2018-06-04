@@ -20,7 +20,7 @@ const linkify = (regex, replacer) => {
 
           const link = document.createElement('a');
           link.textContent = group[0];
-          link.href = replacer(group[0]);
+          link.href = replacer(...group);
           link.target = '_blank';
 
           replaced.replaceWith(link);
