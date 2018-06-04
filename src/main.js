@@ -15,11 +15,11 @@ const plugins = [takeScreenshot];
   console.log(`Connected to ${port}`);
 
   await opn('', {
-    app: ['Slack 2', `--remote-debugging-port=${port}`],
+    app: ['Slack', `--remote-debugging-port=${port}`],
     wait: false,
   });
 
-  const Protocol = await waitForApp(() => CDP({ port }));
+  const Protocol = await waitForApp(() => CDP({ port, local: true }));
 
   await Protocol.Runtime.enable();
   await Protocol.Page.enable();

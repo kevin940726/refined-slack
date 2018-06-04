@@ -10,14 +10,6 @@ exports.evaluate = Protocol => (fn, ...args) =>
     awaitPromise: true,
   });
 
-exports.addScriptToEvaluateOnNewDocument = Protocol => (fn, ...args) => {
-  Protocol.Page.addScriptToEvaluateOnNewDocument({
-    source: `window.addEventListener('load', () => (${fn.toString()})(${args
-      .map(JSON.stringify)
-      .join(',')}))`,
-  });
-};
-
 exports.addEventListener = Protocol => (eventName, listener) => {
   Protocol.Runtime.consoleAPICalled(({ type, args }) => {
     if (
@@ -29,9 +21,11 @@ exports.addEventListener = Protocol => (eventName, listener) => {
     }
   });
 
-  Protocol.Page.addScriptToEvaluateOnNewDocument({
-    source: `window.RSDispatchEvent = (eventName, ...args) => console.debug(${JSON.stringify(
-      REFINED_SLACK_PROTOCOL
-    )}, eventName, ...args.map(JSON.stringify))`,
+  Protocol.Page.domContentEventFired(() => {
+    Protocol.Runtime.evaluate({
+      expression: `window.RSDispatchEvent = (eventName, ...args) => console.debug(${JSON.stringify(
+        REFINED_SLACK_PROTOCOL
+      )}, eventName, ...args.map(JSON.stringify))`,
+    });
   });
 };
