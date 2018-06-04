@@ -1,7 +1,7 @@
-const highlightShy = () => {
-  const MEMBER_ID = 'U4VAMTQ5V';
-  const COLOR = 'orange';
+const MEMBER_ID = 'U4VAMTQ5V';
+const COLOR = 'orange';
 
+const highlightShy = () => {
   document.head
     .appendChild(document.createElement('style'))
     .sheet.insertRule(
@@ -9,5 +9,4 @@ const highlightShy = () => {
     );
 };
 
-export default ({ addScriptToEvaluateOnNewDocument }) =>
-  addScriptToEvaluateOnNewDocument(highlightShy);
+export default highlightShy;

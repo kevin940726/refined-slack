@@ -1,6 +1,6 @@
 const REFINED_SLACK_PROTOCOL = '__REFINED_SLACK_PROTOCOL__';
 
-export const createEvaluate = Protocol => (fn, ...args) =>
+exports.evaluate = Protocol => (fn, ...args) =>
   Protocol.Runtime.evaluate({
     expression: `(async () => await (${fn.toString()})(${args
       .map(JSON.stringify)
@@ -10,10 +10,7 @@ export const createEvaluate = Protocol => (fn, ...args) =>
     awaitPromise: true,
   });
 
-export const createAddScriptToEvaluateOnNewDocument = Protocol => (
-  fn,
-  ...args
-) => {
+exports.addScriptToEvaluateOnNewDocument = Protocol => (fn, ...args) => {
   Protocol.Page.addScriptToEvaluateOnNewDocument({
     source: `window.addEventListener('load', () => (${fn.toString()})(${args
       .map(JSON.stringify)
@@ -21,7 +18,7 @@ export const createAddScriptToEvaluateOnNewDocument = Protocol => (
   });
 };
 
-export const createAddEventListener = Protocol => (eventName, listener) => {
+exports.addEventListener = Protocol => (eventName, listener) => {
   Protocol.Runtime.consoleAPICalled(({ type, args }) => {
     if (
       type === 'debug' &&
