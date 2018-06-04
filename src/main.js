@@ -2,10 +2,10 @@ const path = require('path');
 const fs = require('fs');
 const opn = require('opn');
 const getPort = require('get-port');
-import CDP from 'chrome-remote-interface';
-import { waitForApp } from './utils';
+const CDP = require('chrome-remote-interface');
+const { waitForApp } = require('./utils');
 
-import takeScreenshot from './plugins/takeScreenshot/server';
+const takeScreenshot = require('./plugins/takeScreenshot/server');
 
 const plugins = [takeScreenshot];
 

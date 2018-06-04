@@ -2,7 +2,7 @@
 import linkify from '../helpers/linkify';
 
 const GITHUB_HOST_URL = 'https://github.com/17media/17live/issues/';
-const GITHUB_REGEX = /#\d+/g;
+const GITHUB_REGEX = /#\d+/;
 
 const linkifyGithub = linkify(
   GITHUB_REGEX,

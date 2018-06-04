@@ -6,33 +6,27 @@ const linkify = (regex, replacer) => {
       node => regex.test(node.textContent)
     );
 
-    const nodes = [];
-
     let currentNode;
     while ((currentNode = nodeIterator.nextNode())) {
       // don't linkify <a> tag
       if (!currentNode.parentNode || currentNode.parentNode.nodeName !== 'A') {
-        nodes.push(currentNode);
+        let group;
+
+        regex.lastIndex = 0;
+
+        while ((group = regex.exec(currentNode.textContent))) {
+          const replaced = currentNode.splitText(group.index);
+          replaced.splitText(group[0].length);
+
+          const link = document.createElement('a');
+          link.textContent = group[0];
+          link.href = replacer(group[0]);
+          link.target = '_blank';
+
+          replaced.replaceWith(link);
+        }
       }
     }
-
-    nodes.forEach(node => {
-      let group;
-
-      regex.lastIndex = 0;
-
-      while ((group = regex.exec(node.textContent))) {
-        const replaced = node.splitText(group.index);
-        replaced.splitText(group[0].length);
-
-        const link = document.createElement('a');
-        link.textContent = group[0];
-        link.href = replacer(group[0]);
-        link.target = '_blank';
-
-        replaced.replaceWith(link);
-      }
-    });
   };
 
   const observer = new MutationObserver(mutations => {

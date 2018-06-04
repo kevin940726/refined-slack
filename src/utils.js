@@ -1,4 +1,4 @@
-export const waitForApp = (reachApp, timeout = 20000) =>
+exports.waitForApp = (reachApp, timeout = 20000) =>
   new Promise((resolve, reject) => {
     const recursiveWait = () => {
       setTimeout(async () => {
