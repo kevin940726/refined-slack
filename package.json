@@ -10,6 +10,7 @@
   "scripts": {
     "start": "node src/index.js",
     "build": "webpack",
+    "build:app": "./scripts/build-app.sh",
     "pkg": "pkg --out-dir=bin .",
     "precommit": "lint-staged"
   },
