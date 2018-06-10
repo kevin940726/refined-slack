@@ -12,6 +12,7 @@
     "build": "webpack",
     "build:app": "./scripts/build-app.sh",
     "pkg": "pkg --out-dir=bin .",
+    "prepublish": "npm run build && npm run pkg && npm run build:app",
     "precommit": "lint-staged"
   },
   "lint-staged": {
