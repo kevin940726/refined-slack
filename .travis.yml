@@ -1,0 +1,7 @@
+language: node_js
+sudo: enabled
+os: osx
+cache:
+  yarn: true
+install: yarn
+script: yarn run prepublish
