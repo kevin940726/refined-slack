@@ -5,3 +5,12 @@ cache:
   yarn: true
 install: yarn
 script: yarn run prepublish
+deploy:
+  provider: releases
+  api_key:
+    secure: UVd9GGwnCgCBBZfrRvx5TqosWGA+wvaPRDDZNc2g2QKjbok0olHuJ3WSNWo6T9baetdjH9PMBk+IHhkMD1aJnNxC+SyaxM63Y1RhwZEC1USdQj6eIYvdHzvoSQp1K1PKniQjWlQB4R8e+c1e4n5UZC4t5wry2MqvagnakshL/4GBwNjOddlFv/B7WAKcCQw7kTilM0Qw+qNWwOHOO8bNXXZkskS+FbYLaTGQmiEUwm1DeVN8pFW5vVG+qH80viLaKuiwHXABHSLTKd0hgmp6D8xDIzpgEM1dHsYuWxXMYxUmUbZwMe/Trm+u98lHV6QvDjF/jk3cHYJJjRg6kPsZN8/0Bg8t0FL4dpC/3HOnbmq7TS2qvl5SPkRfDa+TnEl/X22U3baqNrYgg5MGTZHRSVce/snowfEjBDk8I6TajQeBf5qHfZP2MD/YEmMWTZRGTqzP/L6J5jnUUIX4A8Idu2QruWbljRc6gNSGdH59jj3UcYgS518ulk29SYvBHtohlDQCqbMIiGZ5lI3rmdVDymbe35/r45TpMiUYa4M2JkcP+OxkhxvCXeNN6YLbRsiedKdvLmPgqb+259CXdMrv3pt1CJ2Gl9cHQ/+jjOnBj8iiVPhijifGmZ5aUJeQGN+rQhyclEteNDMJjuvfx9Zwlh+S08JuUKk6he/qfDd72d8=
+  skip_cleanup: true
+  file: dist/refined-slack.app
+  on:
+    repo: kevin940726/refined-slack
+    tags: true
