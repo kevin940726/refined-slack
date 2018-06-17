@@ -1,4 +1,4 @@
-import { SCREENSHOT_EVENT_NAME } from './shared';
+import { screenshotEvent } from './shared';
 
 const addButtonToMessageActions = () => {
   const makeToggleHighlighted = isActive =>
@@ -42,7 +42,7 @@ const addButtonToMessageActions = () => {
       fileName,
     };
 
-    window.RSDispatchEvent(SCREENSHOT_EVENT_NAME, box);
+    screenshotEvent.dispatch(box);
   };
 
   const addScreenShotButton = (message, actionsMenu) => {

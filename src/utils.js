@@ -45,22 +45,36 @@ exports.evaluate = Protocol => (fn, ...args) =>
     awaitPromise: true,
   });
 
-exports.addEventListener = Protocol => (eventName, listener) => {
-  Protocol.Runtime.consoleAPICalled(({ type, args }) => {
-    if (
-      type === 'debug' &&
-      args[0].value === REFINED_SLACK_PROTOCOL &&
-      args[1].value === eventName
-    ) {
-      listener(...args.slice(2).map(arg => JSON.parse(arg.value)));
-    }
-  });
+exports.createEventListener = eventName => {
+  const listen = (Protocol, listener) => {
+    Protocol.Runtime.consoleAPICalled(({ type, args }) => {
+      if (
+        type === 'debug' &&
+        args[0].value === REFINED_SLACK_PROTOCOL &&
+        args[1].value === eventName
+      ) {
+        listener(...args.slice(2).map(arg => JSON.parse(arg.value)));
+      }
+    });
 
-  Protocol.Runtime.evaluate({
-    expression: `window.RSDispatchEvent = (eventName, ...args) => console.debug(${JSON.stringify(
-      REFINED_SLACK_PROTOCOL
-    )}, eventName, ...args.map(JSON.stringify))`,
-  });
+    Protocol.Runtime.evaluate({
+      expression: `(${(protocolName => {
+        window._RSDispatchEvent =
+          window._RSDispatchEvent ||
+          ((eventName, ...args) =>
+            console.debug(
+              protocolName,
+              eventName,
+              ...args.map(JSON.stringify)
+            ));
+      }).toString()})(${JSON.stringify(REFINED_SLACK_PROTOCOL)})`,
+    });
+  };
+
+  return {
+    listen,
+    dispatch: (...args) => window._RSDispatchEvent(eventName, ...args),
+  };
 };
 
 exports.callFunctionOn = Protocol => (remoteObject, fn, ...args) =>

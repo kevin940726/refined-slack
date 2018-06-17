@@ -3,9 +3,8 @@ const jimp = require('jimp');
 const opn = require('opn');
 const downloadsFolder = require('downloads-folder');
 const sanitizeFileName = require('sanitize-filename');
-const { addEventListener } = require('../../utils');
+const { screenshotEvent } = require('./shared');
 
-const SCREENSHOT_EVENT_NAME = 'RS_takeScreenshot';
 const DOWNLOADS_FOLDER = downloadsFolder();
 
 const takeScreenshot = ({ Page, Emulation }) => async box => {
@@ -57,8 +56,5 @@ const takeScreenshot = ({ Page, Emulation }) => async box => {
 };
 
 module.exports = async Protocol => {
-  await addEventListener(Protocol)(
-    SCREENSHOT_EVENT_NAME,
-    takeScreenshot(Protocol)
-  );
+  screenshotEvent.listen(Protocol, takeScreenshot(Protocol));
 };

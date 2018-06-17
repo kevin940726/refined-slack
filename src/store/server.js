@@ -1,5 +1,5 @@
-const { evaluate, callFunctionOn, addEventListener } = require('../utils');
-const { STORE_NAME, SET_PLUGIN_EVENT } = require('./shared');
+const { evaluate, callFunctionOn } = require('../utils');
+const { STORE_NAME, setPluginEvent } = require('./shared');
 
 const getElectronStore = Protocol =>
   evaluate(Protocol)(
@@ -39,8 +39,7 @@ exports.injectPlugins = async (remoteProtocol, clientProtocol) => {
     JSON.stringify(store)
   );
 
-  await addEventListener(clientProtocol)(SET_PLUGIN_EVENT, plugins => {
-    const nextStore = { plugins };
-    callFunctionOn(remoteProtocol)(remoteStore, setStore, nextStore);
+  await setPluginEvent.listen(clientProtocol, plugins => {
+    callFunctionOn(remoteProtocol)(remoteStore, setStore, { plugins });
   });
 };
