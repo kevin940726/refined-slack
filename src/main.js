@@ -1,15 +1,11 @@
-const path = require('path');
-const fs = require('fs');
 const opn = require('opn');
 const getPort = require('get-port');
-const CDP = require('chrome-remote-interface');
-const { waitForApp } = require('./utils');
 
-const takeScreenshot = require('./plugins/takeScreenshot/server');
+const connect = require('./connect');
+const remote = require('./remote');
+const { injectPlugins } = require('./store/server');
 
-const plugins = [takeScreenshot];
-
-(async () => {
+async function main() {
   const port = await getPort({ port: 9222 });
 
   console.log(`Connected to ${port}`);
@@ -19,33 +15,10 @@ const plugins = [takeScreenshot];
     wait: false,
   });
 
-  const Protocol = await waitForApp(() => CDP({ port, local: true }));
+  const remoteProtocol = await remote(port);
+  const clientProtocol = await connect(port);
 
-  await Protocol.Runtime.enable();
-  await Protocol.Page.enable();
+  await injectPlugins(remoteProtocol, clientProtocol);
+}
 
-  Protocol.Runtime.consoleAPICalled(({ type, args }) => {
-    if (type === 'log') {
-      console.log(...args);
-    } else if (type === 'error') {
-      console.error(...args);
-    }
-  });
-
-  Protocol.Runtime.exceptionThrown(({ exceptionDetails }) => {
-    console.error(exceptionDetails);
-  });
-
-  Protocol.Page.domContentEventFired(() => {
-    Protocol.Runtime.evaluate({
-      expression: fs.readFileSync(
-        path.resolve(__dirname, '../build/client.js'),
-        'utf8'
-      ),
-    });
-  });
-
-  plugins.forEach(async plugin => {
-    await plugin(Protocol);
-  });
-})();
+main();

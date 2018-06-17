@@ -35,6 +35,7 @@
   "dependencies": {
     "chrome-remote-interface": "~0.25.6",
     "downloads-folder": "~1.0.1",
+    "electron-store": "~2.0.0",
     "esm": "~3.0.43",
     "get-port": "~3.2.0",
     "jimp": "~0.2.28",
