@@ -8,14 +8,12 @@ const linkify = (regex, replacer) => {
 
     let currentNode;
     while ((currentNode = nodeIterator.nextNode())) {
-      // don't linkify node under <a> tag
-      if (
+      const currentElement =
         currentNode &&
-        !(currentNode.closest
-          ? currentNode
-          : currentNode.parentElement
-        ).closest('a')
-      ) {
+        (currentNode.nodeType !== 1 ? currentNode.parentElement : currentNode);
+
+      // don't linkify node under <a> tag
+      if (currentElement && !currentElement.closest('a')) {
         let group;
 
         regex.lastIndex = 0;
@@ -37,7 +35,13 @@ const linkify = (regex, replacer) => {
 
   const observer = new MutationObserver(mutations => {
     mutations.forEach(mutation => {
-      if (mutation.target) {
+      if (
+        mutation.target &&
+        (document
+          .getElementById('messages_container')
+          .contains(mutation.target) ||
+          document.getElementById('flex_contents').contains(mutation.target))
+      ) {
         iterateLink(mutation.target);
       }
     });
