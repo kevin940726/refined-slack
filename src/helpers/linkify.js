@@ -8,8 +8,14 @@ const linkify = (regex, replacer) => {
 
     let currentNode;
     while ((currentNode = nodeIterator.nextNode())) {
-      // don't linkify <a> tag
-      if (!currentNode.parentNode || currentNode.parentNode.nodeName !== 'A') {
+      // don't linkify node under <a> tag
+      if (
+        currentNode &&
+        !(currentNode.closest
+          ? currentNode
+          : currentNode.parentElement
+        ).closest('a')
+      ) {
         let group;
 
         regex.lastIndex = 0;
@@ -31,11 +37,7 @@ const linkify = (regex, replacer) => {
 
   const observer = new MutationObserver(mutations => {
     mutations.forEach(mutation => {
-      if (
-        mutation.target &&
-        mutation.target.classList &&
-        mutation.target.classList.contains('c-virtual_list__scroll_container')
-      ) {
+      if (mutation.target) {
         iterateLink(mutation.target);
       }
     });
@@ -50,13 +52,7 @@ const linkify = (regex, replacer) => {
   window.addEventListener(
     'load',
     () => {
-      const messageContainer = document.querySelector(
-        '.c-virtual_list__scroll_container'
-      );
-
-      if (messageContainer) {
-        iterateLink(messageContainer);
-      }
+      iterateLink(document.body);
     },
     false
   );
