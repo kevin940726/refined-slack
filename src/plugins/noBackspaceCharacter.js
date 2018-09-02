@@ -6,7 +6,9 @@ function handleInput(e) {
 }
 
 const noBackspaceCharacter = () => {
-  const messageInput = document.getElementById(MESSAGE_INPUT_ID);
+  const messageInput = document
+    .getElementById(MESSAGE_INPUT_ID)
+    .querySelector('ql-editor');
 
   messageInput.addEventListener('input', handleInput);
 };
