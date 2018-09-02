@@ -4,7 +4,6 @@ import linkifyJira from './plugins/linkifyJira';
 import linkifyGithub from './plugins/linkifyGithub';
 import noBackspaceCharacter from './plugins/noBackspaceCharacter';
 import sendLinkChat from './plugins/sendLinkChat';
-import { getPlugins, setPlugins } from './store/client';
 
 const defaultPlugins = [
   [
@@ -43,34 +42,9 @@ const mapPlugins = pluginName => {
   }[pluginName];
 };
 
-const getPluginName = plugin =>
-  typeof plugin === 'string' ? plugin : plugin[0];
-
-const mergePlugins = (base, plugins) => {
-  base.reverse().forEach(basePlugin => {
-    if (
-      !plugins.find(
-        plugin => getPluginName(plugin) === getPluginName(basePlugin)
-      )
-    ) {
-      plugins.unshift(basePlugin);
-    }
-  });
-
-  return plugins;
-};
-
 (async () => {
-  let plugins = await getPlugins();
-
-  if (!plugins || !plugins.length) {
-    plugins = defaultPlugins;
-
-    await setPlugins(plugins);
-  }
-
-  mergePlugins(defaultPlugins, plugins);
-  await setPlugins(plugins);
+  // TODO: implement config preference
+  const plugins = defaultPlugins;
 
   plugins.forEach(plugin => {
     if (typeof plugin === 'string') {

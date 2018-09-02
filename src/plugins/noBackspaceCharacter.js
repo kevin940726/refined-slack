@@ -6,11 +6,18 @@ function handleInput(e) {
 }
 
 const noBackspaceCharacter = () => {
-  const messageInput = document
-    .getElementById(MESSAGE_INPUT_ID)
-    .querySelector('ql-editor');
-
-  messageInput.addEventListener('input', handleInput);
+  document.addEventListener(
+    'input',
+    e => {
+      if (
+        e.target ===
+        document.getElementById(MESSAGE_INPUT_ID).querySelector('ql-editor')
+      ) {
+        handleInput(e);
+      }
+    },
+    false
+  );
 };
 
 export default noBackspaceCharacter;
