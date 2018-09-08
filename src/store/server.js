@@ -1,35 +1,46 @@
-const { evaluate, callFunctionOn } = require('../utils');
+const appConfig = require('application-config');
+const pkg = require('../../package.json');
+const { evaluate } = require('../utils');
 const { STORE_NAME, setPluginEvent } = require('./shared');
 
-const getElectronStore = Protocol =>
-  evaluate(Protocol)(
-    (storeName, requirePath) => {
-      const Store = require(requirePath);
-      const store = new Store({
-        name: storeName,
-      });
+const store = appConfig(pkg.name);
 
-      return store;
-    },
-    STORE_NAME,
-    require.resolve('electron-store')
-  );
+console.log(store.filePath);
 
-function getStore() {
-  return JSON.stringify(this.store);
+async function getStore() {
+  return new Promise((resolve, reject) => {
+    store.read((err, data) => {
+      if (err) {
+        return reject(err);
+      }
+
+      try {
+        resolve(JSON.parse(data));
+      } catch (error) {
+        reject(error);
+      }
+    });
+  });
 }
 
-function setStore(nextStore) {
-  return this.set(JSON.parse(nextStore));
+async function setStore(nextStore) {
+  return new Promise((resolve, reject) => {
+    try {
+      store.write(JSON.stringify(nextStore, null, 2), err => {
+        if (err) {
+          reject(err);
+        }
+
+        resolve(nextStore);
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
 }
 
 exports.injectPlugins = async (remoteProtocol, clientProtocol) => {
-  const { result: remoteStore } = await getElectronStore(remoteProtocol);
-
-  const store =
-    JSON.parse(
-      (await callFunctionOn(remoteProtocol)(remoteStore, getStore)).result.value
-    ) || {};
+  const store = await getStore();
 
   await evaluate(clientProtocol)(
     (storeName, storeValueString) => {
@@ -39,7 +50,9 @@ exports.injectPlugins = async (remoteProtocol, clientProtocol) => {
     JSON.stringify(store)
   );
 
-  await setPluginEvent.listen(clientProtocol, plugins => {
-    callFunctionOn(remoteProtocol)(remoteStore, setStore, { plugins });
+  await setPluginEvent.listen(clientProtocol, async plugins => {
+    const currentStore = await getStore();
+
+    return setStore(Object.assign(currentStore, { plugins }));
   });
 };

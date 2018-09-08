@@ -754,6 +754,17 @@ app-root-path@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/app-root-path/-/app-root-path-2.0.1.tgz#cd62dcf8e4fd5a417efc664d2e5b10653c651b46"
 
+application-config-path@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/application-config-path/-/application-config-path-0.1.0.tgz#193c5f0a86541a4c66fba1e2dc38583362ea5e8f"
+
+application-config@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/application-config/-/application-config-1.0.1.tgz#5aa2e2a5ed6abd2e5d1d473d3596f574044fe9e7"
+  dependencies:
+    application-config-path "^0.1.0"
+    mkdirp "^0.5.1"
+
 aproba@^1.0.3, aproba@^1.1.1:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/aproba/-/aproba-1.2.0.tgz#6802e6264efd18c790a1b0d517f0f2627bf2c94a"
