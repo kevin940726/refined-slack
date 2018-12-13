@@ -29,7 +29,7 @@
       "./build/client.js"
     ],
     "targets": [
-      "node10"
+      "node8"
     ]
   },
   "dependencies": {
@@ -41,6 +41,7 @@
     "get-port": "~3.2.0",
     "jimp": "~0.2.28",
     "opn": "~5.3.0",
+    "react-devtools-core": "^3.3.4",
     "sanitize-filename": "~1.6.1"
   },
   "devDependencies": {

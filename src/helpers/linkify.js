@@ -12,8 +12,12 @@ const linkify = (regex, replacer) => {
         currentNode &&
         (currentNode.nodeType !== 1 ? currentNode.parentElement : currentNode);
 
-      // don't linkify node under <a> tag
-      if (currentElement && !currentElement.closest('a')) {
+      // don't linkify node under <a> tag or quill editor
+      if (
+        currentElement &&
+        !currentElement.closest('a') &&
+        !currentElement.closest('.ql-editor')
+      ) {
         let group;
 
         regex.lastIndex = 0;
