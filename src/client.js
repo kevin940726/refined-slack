@@ -4,6 +4,7 @@ import linkifyJira from './plugins/linkifyJira';
 import linkifyGithub from './plugins/linkifyGithub';
 import noBackspaceCharacter from './plugins/noBackspaceCharacter';
 import sendLinkChat from './plugins/sendLinkChat';
+import hideDepartment from './plugins/hideDepartment';
 
 const defaultPlugins = [
   [
@@ -29,6 +30,7 @@ const defaultPlugins = [
   ],
   'noBackspaceCharacter',
   'sendLinkChat',
+  'hideDepartment',
 ];
 
 const mapPlugins = pluginName => {
@@ -39,6 +41,7 @@ const mapPlugins = pluginName => {
     linkifyGithub,
     noBackspaceCharacter,
     sendLinkChat,
+    hideDepartment,
   }[pluginName];
 };
 
