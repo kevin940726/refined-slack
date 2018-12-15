@@ -12,12 +12,15 @@ function trimDepart(name) {
 }
 
 const hideDepartment = () => {
-  monkeyPatch(window.TS.redux, 'getState', state => {
-    Object.values(state.members).forEach(m => {
-      m.profile.display_name = m.name || trimDepart(m.profile.display_name);
-      m.profile.real_name = m.name || trimDepart(m.profile.real_name);
-    });
-    return state;
+  monkeyPatch(window.TS.interop.members, 'getMemberById', member => {
+    if (member && member.profile) {
+      member.profile.display_name =
+        member.name || trimDepart(member.profile.display_name);
+      member.profile.real_name =
+        member.name || trimDepart(member.profile.real_name);
+    }
+
+    return member;
   });
 };
 
