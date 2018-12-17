@@ -31,6 +31,10 @@ export const patchSendChat = patch => {
         path.startsWith(UPDATE_MESSAGE_API_ENDPOINT)) &&
       data instanceof FormData
     ) {
+      if (path.startsWith(UPDATE_MESSAGE_API_ENDPOINT)) {
+        data.set('link_names', 1);
+      }
+
       patch({ data });
     }
   });

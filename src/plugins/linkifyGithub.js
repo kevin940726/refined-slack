@@ -12,11 +12,11 @@ const linkifyGithub = ({
   defaultOwner = DEFAULT_OWNER,
   defaultRepo = DEFAULT_REPO,
 }) => {
-  linkify(
-    GITHUB_REGEX,
-    (match, owner = defaultOwner, repo = defaultRepo, issue) =>
-      `${GITHUB_HOST_URL}${owner}/${repo}/issues/${issue}`
-  );
+  // linkify(
+  //   GITHUB_REGEX,
+  //   (match, owner = defaultOwner, repo = defaultRepo, issue) =>
+  //     `${GITHUB_HOST_URL}${owner}/${repo}/issues/${issue}`
+  // );
 
   patchSendChat(({ data }) => {
     const text = data.get('text');

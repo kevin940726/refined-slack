@@ -1,4 +1,4 @@
-const linkify = (regex, replacer) => {
+const linkify = (regex, replacer, labeler = match => match) => {
   const iterateLink = root => {
     const nodeIterator = document.createNodeIterator(
       root,
@@ -12,8 +12,12 @@ const linkify = (regex, replacer) => {
         currentNode &&
         (currentNode.nodeType !== 1 ? currentNode.parentElement : currentNode);
 
-      // don't linkify node under <a> tag
-      if (currentElement && !currentElement.closest('a')) {
+      // don't linkify node under <a> tag or quill editor
+      if (
+        currentElement &&
+        !currentElement.closest('a') &&
+        !currentElement.closest('.ql-editor')
+      ) {
         let group;
 
         regex.lastIndex = 0;
@@ -23,7 +27,7 @@ const linkify = (regex, replacer) => {
           replaced.splitText(group[0].length);
 
           const link = document.createElement('a');
-          link.textContent = group[0];
+          link.textContent = labeler(...group);
           link.href = replacer(...group);
           link.target = '_blank';
 
